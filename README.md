@@ -9,10 +9,10 @@ A cross-platform native audio-engine SDK by Pauze, built around a shared C++20 p
 - Engine lifecycle state machine.
 - Pluggable synchronous PCM processor interface.
 - Input format validation.
-- CMake build and CTest unit tests.
+- CMake build and CTest unit tests.\n- Android low-latency Float32 output backend using Oboe (Android builds only).
 - GitHub Actions CI on Linux, macOS, and Windows.
 
-## Build
+## Android backend\n\nThe Android-only `PAC::Android` target wraps Oboe for low-latency Float32 output. See [`examples/android/README.md`](examples/android/README.md) for dependency setup and usage. Android hardware testing is still required.\n\n## Build
 Requirements: CMake 3.20+ and a C++20 compiler.
 
 ```bash
