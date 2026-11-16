@@ -19,14 +19,12 @@ dependencies {
 Make PAC available to the Android native target and link Oboe:
 
 ```cmake
-find_package(oboe REQUIRED CONFIG)
 add_subdirectory(path/to/PAC-Audio-Engine- pac)
 target_link_libraries(your-native-target PRIVATE PAC::Core PAC::Android oboe)
 ```
 
-The Android package must expose the Oboe CMake package to `find_package`.
-The exact imported target can vary by Oboe distribution; use the target
-exported by the dependency in your project.
+PAC fetches the pinned Oboe 1.9.3 source with CMake FetchContent when building
+for Android, and links its `oboe` target automatically.
 
 ## Minimal native usage
 
@@ -61,5 +59,5 @@ than assuming the requested rate/channels were accepted.
 - Do not allocate, lock, log, or perform I/O in `AudioProcessor::process()`.
 - The engine and any installed processor must remain alive while callbacks
   can run. Stop and close the stream before destroying either.
-- Android hardware/device testing is still required; desktop CI cannot verify
-  real audio output, latency, or device-specific behavior.
+- Android hardware/device testing is still required; the Android CI job compiles the arm64-v8a backend, but cannot verify real
+audio output, latency, or device-specific behavior on physical hardware.
