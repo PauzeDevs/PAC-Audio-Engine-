@@ -18,7 +18,15 @@ else()
 endif()
 
 if(ANDROID)
-  find_package(oboe REQUIRED CONFIG)
+  include(FetchContent)
+  set(OBOE_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(OBOE_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+  FetchContent_Declare(oboe
+    GIT_REPOSITORY https://github.com/google/oboe.git
+    GIT_TAG 1.9.3
+    GIT_SHALLOW TRUE)
+  FetchContent_MakeAvailable(oboe)
+
   add_library(pac_android src/platform/android/oboe_output.cpp)
   add_library(PAC::Android ALIAS pac_android)
   target_include_directories(pac_android PUBLIC
@@ -31,7 +39,7 @@ if(ANDROID)
     POSITION_INDEPENDENT_CODE ON)
 endif()
 
-if(PAC_BUILD_TESTS)
+if(PAC_BUILD_TESTS AND NOT ANDROID)
   enable_testing()
   add_executable(pac_core_tests tests/audio_engine_tests.cpp)
   target_link_libraries(pac_core_tests PRIVATE PAC::Core)
