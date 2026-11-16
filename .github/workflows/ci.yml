@@ -33,10 +33,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Android SDK and NDK
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: "cmake;3.22.1 ndk;27.2.12479018"
+          packages: "cmake;3.22.1"
+      - name: Install Android NDK (retry transient download failures)
+        shell: bash
+        run: |
+          SDKMANAGER="$(find "$ANDROID_SDK_ROOT/cmdline-tools" -mindepth 2 -maxdepth 2 -type f -name sdkmanager | sort -V | tail -n 1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found"
+            exit 1
+          fi
+          for attempt in 1 2 3; do
+            echo "NDK installation attempt $attempt/3"
+            if yes | "$SDKMANAGER" --install "ndk;27.2.12479018"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 10))
+            fi
+          done
+          echo "NDK installation failed after 3 attempts"
+          exit 1
       - name: Configure Android
         run: >
           cmake -S . -B build-android
