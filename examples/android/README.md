@@ -9,12 +9,10 @@ Add Oboe to the Android application's module dependencies:
 
 ```kotlin
 dependencies {
-    implementation(" com.google.oboe:oboe:1.9.3")
+    implementation("com.google.oboe:oboe:1.9.3")
 }
 ```
 
-Remove the leading space inside the dependency string if copying: the
-coordinate is `com.google.oboe:oboe:1.9.3`.
 
 ## CMake
 
@@ -23,7 +21,7 @@ Make PAC available to the Android native target and link Oboe:
 ```cmake
 find_package(oboe REQUIRED CONFIG)
 add_subdirectory(path/to/PAC-Audio-Engine- pac)
-target_link_libraries(your-native-target PRIVATE PAC::Core PAC::Android Oboe)
+target_link_libraries(your-native-target PRIVATE PAC::Core PAC::Android oboe)
 ```
 
 The Android package must expose the Oboe CMake package to `find_package`.
