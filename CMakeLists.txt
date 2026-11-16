@@ -17,6 +17,20 @@ else()
   target_compile_options(pac_core PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
 endif()
 
+if(ANDROID)
+  find_package(oboe REQUIRED CONFIG)
+  add_library(pac_android src/platform/android/oboe_output.cpp)
+  add_library(PAC::Android ALIAS pac_android)
+  target_include_directories(pac_android PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+  target_compile_features(pac_android PUBLIC cxx_std_20)
+  target_link_libraries(pac_android PUBLIC PAC::Core oboe)
+  set_target_properties(pac_android PROPERTIES
+    CXX_EXTENSIONS OFF
+    POSITION_INDEPENDENT_CODE ON)
+endif()
+
 if(PAC_BUILD_TESTS)
   enable_testing()
   add_executable(pac_core_tests tests/audio_engine_tests.cpp)
