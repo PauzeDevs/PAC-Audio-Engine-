@@ -17,13 +17,13 @@ oboe::Result OboeOutput::open(AudioEngine& engine,
   }
 
   oboe::AudioStreamBuilder builder;
-  builder.setDirection(oboe::Direction::Output)
-      ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
-      ->setFormat(oboe::AudioFormat::Float)
-      ->setChannelCount(static_cast<std::int32_t>(requested_format.channel_count))
-      ->setSampleRate(static_cast<std::int32_t>(requested_format.sample_rate_hz))
-      ->setSharingMode(oboe::SharingMode::Exclusive)
-      ->setDataCallback(this);
+  builder.setDirection(oboe::Direction::Output);
+  builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
+  builder.setFormat(oboe::AudioFormat::Float);
+  builder.setChannelCount(static_cast<std::int32_t>(requested_format.channel_count));
+  builder.setSampleRate(static_cast<std::int32_t>(requested_format.sample_rate_hz));
+  builder.setSharingMode(oboe::SharingMode::Exclusive);
+  builder.setDataCallback(this);
 
   oboe::Result result = builder.openStream(stream_);
   if (result != oboe::Result::OK) {
